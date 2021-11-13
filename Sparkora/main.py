@@ -23,22 +23,23 @@ class Sparkora:
         self.output = output
         self.training_data = None
         self.testing_data = None
+        self.initial_data = None
 
     def configure(self, data=None, output=None):
         """
         Method for configuring the Sparkora object.
 
-        :param data: data on which Sparkora object will be wrapped.
+        :param data: dataset on which Sparkora object will be wrapped.
         :param output: output column name.
         :return: None
         """
-        if (type(output) is str):
+        if type(output) is str:
             self.output = output
-        if (type(data) is str):
+        if type(data) is str:
             self.initial_data = spark.read.csv(data)
             self.data = self.initial_data
             self.logs = []
-        if (type(data) is DataFrame):
+        if type(data) is DataFrame:
             self.initial_data = data
             self.data = data
             self.logs = []
