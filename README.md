@@ -18,11 +18,14 @@ Exploratory data analysis toolkit for Pyspark.
 <a name="summary"></a>
 ## Summary
 
-Sparkora is a Python library designed to automate the painful parts of exploratory data analysis.
+Sparkora is a Python library designed to automate the painful parts of exploratory data analysis in Apache Spark.
 
-The library contains convenience functions for data cleaning, feature selection & extraction, visualization, partitioning data for model validation, and versioning transformations of data.
+The library contains convenient functions for data cleaning, feature selection & extraction, visualization 
+(databricks native), partitioning data for model validation, and versioning transformations of data.
 
-The library uses and is intended to be a helpful addition to common Python data analysis tools such as pandas, scikit-learn, and matplotlib.
+The library uses pyspark, IPython, os and copy. 
+
+It is intended to be a helpful addition to common Pyspark data analysis tools.
 
 <a name="setup"></a>
 ## Setup

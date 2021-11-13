@@ -18,12 +18,12 @@ class Sparkora:
         """
         self.snapshots = {}
         self.logs = []
-        self.configure(data=data, output=output)
-        self.data = data
-        self.output = output
+        self.data = None
+        self.output = None
         self.training_data = None
         self.validating_data = None
         self.initial_data = None
+        self.configure(data=data, output=output)
 
     def configure(self, data=None, output=None):
         """
@@ -36,7 +36,7 @@ class Sparkora:
         if type(output) is str:
             self.output = output
         if type(data) is str:
-            self.initial_data = spark.read.csv(data)
+            self.initial_data = spark.read.csv(data, header=True)
             self.data = self.initial_data
             self.logs = []
         if type(data) is DataFrame:
@@ -138,11 +138,10 @@ class Sparkora:
         """
         if "DATABRICKS_RUNTIME_VERSION" in os.environ.keys():
             display = get_ipython().user_ns['display']
-            display(self.data.select(feature_name,self.output))
+            display(self.data.select(feature_name, self.output))
             self._log("self.plot_feature('{}')".format(feature_name))
         else:
             raise Exception("plotting feature's only available in Databricks 💀")
-
 
     def input_columns(self):
         """
@@ -177,12 +176,13 @@ class Sparkora:
         :param name: name of the snapshot by which we can refer later if required.
         :return: None
         """
+        self._log("self.snapshot('{}')".format(name))
         snapshot = {
             "data": self.data,
             "logs": deepcopy(self.logs)
         }
         self.snapshots[name] = snapshot
-
+        self.logs = []
 
     def use_snapshot(self, name):
         """
