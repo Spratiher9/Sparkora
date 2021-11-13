@@ -82,6 +82,8 @@ class Sparkora:
         :return: None
         """
         column_names = self.input_columns()
+        dtype_ls = self.data.select(column_names).dtypes
+        column_names = [i[0] for i in dtype_ls if i[1] in ('int','float','double','long','short','decimal')]
         imp = Imputer(inputCols=column_names, outputCols=column_names).setStrategy(strategy)
         self.data = imp.fit(self.data).transform(self.data)
         self._log("self.impute_missing_values({0})".format(strategy))
@@ -93,6 +95,8 @@ class Sparkora:
         :return: None
         """
         column_names = self.input_columns()
+        dtype_ls = self.data.select(column_names).dtypes
+        column_names = [i[0] for i in dtype_ls if i[1] in ('int', 'float', 'double', 'long', 'short', 'decimal')]
         for col in column_names:
             values = self.data.agg(F.max(col).alias("max_value"), F.min(col).alias("min_value")).collect()[0]
             max_value = values["max_value"]
@@ -116,7 +120,7 @@ class Sparkora:
         self.data = self.data.drop(feature_name)
         self._log("self.extract_ordinal_feature('{0}')".format(feature_name))
 
-    def set_training_and_validation(self, train_size):
+    def set_training_and_validation(self, train_size=0.8):
         """
         Method for splitting the data into training and validation sets.
 
