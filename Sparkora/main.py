@@ -22,7 +22,7 @@ class Sparkora:
         self.data = data
         self.output = output
         self.training_data = None
-        self.testing_data = None
+        self.validating_data = None
         self.initial_data = None
 
     def configure(self, data=None, output=None):
@@ -116,17 +116,18 @@ class Sparkora:
         self.data = self.data.drop(feature_name)
         self._log("self.extract_ordinal_feature('{0}')".format(feature_name))
 
-    def set_training_and_testing(self, train_size):
+    def set_training_and_validation(self, train_size):
         """
-        Method for splitting the data into training and testing sets.
+        Method for splitting the data into training and validation sets.
 
         :param train_size: floating point value indicating the amount of data to be kept in training set (remaining
-        in testing set).
+        in validation set).
         :return: None
         """
-        test_size = 1 - train_size
-        self.training_data, self.testing_data = self.data.randomSplit(weights=[train_size, test_size], seed=200)
-        self._log("self.set_training_and_testing({})".format(train_size))
+        validation_size = 1 - train_size
+        self.training_data, self.validating_data = self.data.randomSplit(weights=[train_size, validation_size],
+                                                                         seed=200)
+        self._log("self.set_training_and_validation({})".format(train_size))
 
     def plot_feature(self, feature_name):
         """
