@@ -1,8 +1,4 @@
-<video>
-  <source src="assets/Project_Cover.mp4" type="video/mp4">
-</video>
-
-[comment]: <> (![Sparkora project logo]&#40;assets/Project_Cover.mp4&#41;)
+![Sparkora project logo](./assets/project_cover.mp4)
 # Sparkora
 Exploratory data analysis toolkit for Pyspark.
 
