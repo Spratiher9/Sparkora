@@ -23,7 +23,11 @@ Sparkora is a Python library designed to automate the painful parts of explorato
 The library contains convenient functions for data cleaning, feature selection & extraction, visualization 
 (databricks native), partitioning data for model validation, and versioning transformations of data.
 
-The library uses pyspark, IPython, os and copy. 
+The library uses the following modules:
+* pyspark
+* ipython
+* os 
+* copy 
 
 It is intended to be a helpful addition to common Pyspark data analysis tools.
 
@@ -31,8 +35,8 @@ It is intended to be a helpful addition to common Pyspark data analysis tools.
 ## Setup
 
 ```
-$ pip3 install Sparkora
-$ python3
+$ pip install Sparkora
+$ python
 >>> from Sparkora import Sparkora
 ```
 
@@ -44,15 +48,15 @@ $ python3
 
 ```python
 # without initial config
->>> dora = Sparkora()
->>> dora.configure(output = 'A', data = 'path/to/data.csv')
+>>> sparkora = Sparkora()
+>>> sparkora.configure(output = 'A', data = 'path/to/data.csv')
 
 # is the same as
 >>> import pandas as pd
->>> dataframe = pd.read_csv('path/to/data.csv')
->>> dora = Sparkora(output = 'A', data = dataframe)
+>>> dataframe = spark.read.csv('path/to/data.csv', header=True)
+>>> sparkora = Sparkora(output = 'A', data = dataframe)
 
->>> dora.data
+>>> sparkora.data
    A   B  C      D  useless_feature
 0  1   2  0   left                1
 1  4 NaN  1  right                1
@@ -65,33 +69,36 @@ $ python3
 ```python
 # read data with missing and poorly scaled values
 >>> import pandas as pd
->>> df = pd.DataFrame([
-...   [1, 2, 100],
-...   [2, None, 200],
-...   [1, 6, None]
-... ])
->>> dora = Sparkora(output = 0, data = df)
->>> dora.data
-   0   1    2
-0  1   2  100
-1  2 NaN  200
-2  1   6  NaN
+>>> from pyspark.shell import spark 
+>>> d = [
+...   (1, 2, 100),
+...   (2, None, 200),
+...   (1, 6, None)
+... ]
+>>> df = spark.createDataFrame(d, "_c0 int, _c1 int, _c2 int")
+>>> sparkora = Sparkora(output = '_c0', data = df)
+>>> sparkora.data
+   _c0   _c1    _c2
+0    1     2    100
+1    2   NaN    200
+2    1     6    NaN
 
-# impute the missing values (using the average of each column)
->>> dora.impute_missing_values()
->>> dora.data
-   0  1    2
-0  1  2  100
-1  2  4  200
-2  1  6  150
+# impute the missing values (by default, using 'mean' other options are 'median', 'mode')
+# sparkora.impute_missing_values(strategy = 'mean')
+>>> sparkora.impute_missing_values()
+>>> sparkora.data
+   _c0   _c1    _c2
+0    1     2    100
+1    2     4    200
+2    1     6    150
 
 # scale the values of the input variables (center to mean and scale to unit variance)
->>> dora.scale_input_values()
->>> dora.data
-   0         1         2
-0  1 -1.224745 -1.224745
-1  2  0.000000  1.224745
-2  1  1.224745  0.000000
+>>> sparkora.scale_input_values()
+>>> sparkora.data
+   _c0        _c1         _c2
+0    1     -1.224745   -1.224745
+1    2      0.000000    1.224745
+2    1      1.224745    0.000000
 ```
 
 <a name="feature" ></a>
@@ -99,45 +106,56 @@ $ python3
 
 ```python
 # feature selection / removing a feature
->>> dora.data
+>>> sparkora.data
    A   B  C      D  useless_feature
 0  1   2  0   left                1
 1  4 NaN  1  right                1
 2  7   8  2   left                1
 
->>> dora.remove_feature('useless_feature')
->>> dora.data
+>>> sparkora.remove_feature('useless_feature')
+>>> sparkora.data
    A   B  C      D
 0  1   2  0   left
 1  4 NaN  1  right
 2  7   8  2   left
 
 # extract an ordinal feature through one-hot encoding
->>> dora.extract_ordinal_feature('D')
->>> dora.data
+>>> sparkora.extract_ordinal_feature('D')
+>>> sparkora.data
    A   B  C  D=left  D=right
 0  1   2  0       1        0
 1  4 NaN  1       0        1
 2  7   8  2       1        0
 
 # extract a transformation of another feature
->>> dora.extract_feature('C', 'twoC', lambda x: x * 2)
->>> dora.data
+>>> f_udf = F.udf(lambda x: x * 2, T.IntegerType())
+>>> sparkora.extract_feature('C', 'twoC', f_udf)
+>>> sparkora.data
    A   B  C  D=left  D=right  twoC
 0  1   2  0       1        0     0
 1  4 NaN  1       0        1     2
 2  7   8  2       1        0     4
+
+# extract a transformation of multiple other features
+>>> f_udf = F.udf(lambda x,y: x * y, T.IntegerType())
+>>> sparkora.extract_feature(['C','A'], 'newC', f_udf)
+   A   B  C  D=left  D=right  newC
+0  1   2  0       1        0     0
+1  4 NaN  1       0        1     4
+2  7   8  2       1        0    14
 ```
 
 <a name="visual" ></a>
 #### Visualization
 
 ```python
+# Visualization features are only available if the platform is Databricks
+
 # plot a single feature against the output variable
-dora.plot_feature('column-name')
+sparkora.plot_feature('column-name')
 
 # render plots of each feature against the output variable
-dora.explore()
+sparkora.explore()
 ```
 
 <a name="model" ></a>
@@ -145,17 +163,18 @@ dora.explore()
 
 ```python
 # create random partition of training / validation data (~ 80/20 split)
-dora.set_training_and_validation()
+sparkora.set_training_and_validation(0.8) 
+# pass train size only, the validation size is calculated automatically
 
 # train a model on the data
-X = dora.training_data[dora.input_columns()]
-y = dora.training_data[dora.output]
+X = sparkora.training_data.select(sparkora.input_columns())
+y = sparkora.training_data.select(sparkora.output)
 
 some_model.fit(X, y)
 
 # validate the model
-X = dora.validation_data[dora.input_columns()]
-y = dora.validation_data[dora.output]
+X = sparkora.validating_data.select(sparkora.input_columns())
+y = sparkora.validating_data.select(sparkora.output)
 
 some_model.score(X, y)
 ```
@@ -165,53 +184,53 @@ some_model.score(X, y)
 
 ```python
 # save a version of your data
->>> dora.data
+>>> sparkora.data
    A   B  C      D  useless_feature
 0  1   2  0   left                1
 1  4 NaN  1  right                1
 2  7   8  2   left                1
->>> dora.snapshot('initial_data')
+>>> sparkora.snapshot('initial_data')
 
 # keep track of changes to data
->>> dora.remove_feature('useless_feature')
->>> dora.extract_ordinal_feature('D')
->>> dora.impute_missing_values()
->>> dora.scale_input_values()
->>> dora.data
+>>> sparkora.remove_feature('useless_feature')
+>>> sparkora.extract_ordinal_feature('D')
+>>> sparkora.impute_missing_values()
+>>> sparkora.scale_input_values()
+>>> sparkora.data
    A         B         C    D=left   D=right
 0  1 -1.224745 -1.224745  0.707107 -0.707107
 1  4  0.000000  0.000000 -1.414214  1.414214
 2  7  1.224745  1.224745  0.707107 -0.707107
 
->>> dora.logs
+>>> sparkora.logs
 ["self.remove_feature('useless_feature')", "self.extract_ordinal_feature('D')", 'self.impute_missing_values()', 'self.scale_input_values()']
 
 # use a previous version of the data
->>> dora.snapshot('transform1')
->>> dora.use_snapshot('initial_data')
->>> dora.data
+>>> sparkora.snapshot('transform1')
+>>> sparkora.use_snapshot('initial_data')
+>>> sparkora.data
    A   B  C      D  useless_feature
 0  1   2  0   left                1
 1  4 NaN  1  right                1
 2  7   8  2   left                1
->>> dora.logs
+>>> sparkora.logs
 []
 
 # switch back to your transformation
->>> dora.use_snapshot('transform1')
->>> dora.data
+>>> sparkora.use_snapshot('transform1')
+>>> sparkora.data
    A         B         C    D=left   D=right
 0  1 -1.224745 -1.224745  0.707107 -0.707107
 1  4  0.000000  0.000000 -1.414214  1.414214
 2  7  1.224745  1.224745  0.707107 -0.707107
->>> dora.logs
+>>> sparkora.logs
 ["self.remove_feature('useless_feature')", "self.extract_ordinal_feature('D')", 'self.impute_missing_values()', 'self.scale_input_values()']
 ```
 
 <a name="test" ></a>
 ## Testing
 
-To run the test suite, simply run `python3 spec.py` from the `Sparkora` directory.
+To run the test suite, simply run `python testsparkora.py` from the `Sparkora` directory.
 
 <a name="contribute" ></a>
 ## Contribute
