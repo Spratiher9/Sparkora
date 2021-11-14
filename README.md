@@ -5,6 +5,7 @@ Exploratory data analysis toolkit for Pyspark.
 ## Contents
 - [Summary](#summary)
 - [Setup](#setup)
+- [Examples](#examples)
 - [Usage](#use)
   - [Reading Data & Configuration](#config)
   - [Cleaning](#clean)
@@ -41,18 +42,12 @@ $ python
 >>> from Sparkora import Sparkora
 ```
 
+<a name="examples"></a>
+## Examples
+Go to this jupyter [notebook](./Example Notebooks/sparkora.ipynb) or import [this](./Example Notebooks/sparkora.html) in databricks workspace
+
 <a name="use"></a>
 ## Usage
-
-Either read on below 
-
-or 
-
-go to this ![notebook](Example Notebooks/sparkora.ipynb) 
-
-or
-
-import ![this](Example Notebooks/sparkora.html) in databricks workspace
 
 <a name="config" ></a>
 #### Reading Data & Configuration
