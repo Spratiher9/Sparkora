@@ -48,11 +48,11 @@ Either read on below
 
 or 
 
-go to this [notebook](Example Notebooks/sparkora.ipynb) 
+go to this ![notebook](Example Notebooks/sparkora.ipynb) 
 
 or
 
-import [this](Example Notebooks/sparkora.html) in databricks workspace
+import ![this](Example Notebooks/sparkora.html) in databricks workspace
 
 <a name="config" ></a>
 #### Reading Data & Configuration
