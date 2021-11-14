@@ -46,11 +46,11 @@ $ python
 
 Either read on below 
 
-**or** 
+or 
 
 go to this [notebook](Example Notebooks/sparkora.ipynb) 
 
-**or**
+or
 
 import [this](Example Notebooks/sparkora.html) in databricks workspace
 
