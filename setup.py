@@ -18,6 +18,7 @@ setup(
     author_email="spratiher9@gmail.com",
     description="Exploratory data analysis toolkit for Pyspark",
     license="GPL-3.0 License",
+    download_url='https://github.com/Spratiher9/Sparkora/archive/refs/tags/0.0.1.tar.gz',
     keywords=["exploratory data analysis", "EDA", "pyspark", "preprocessing"],
     long_description=bdescription,
     long_description_content_type='text/markdown',
