@@ -1,5 +1,5 @@
 ![Sparkora project logo](./assets/project_cover.gif)
-# Sparkora
+# Sparkora [![PyPI version](https://badge.fury.io/py/Sparkora.svg)](https://badge.fury.io/py/Sparkora)  [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Spratiher9/Sparkora/graphs/commit-activity)
 Exploratory data analysis toolkit for Pyspark.
 
 ## Contents
