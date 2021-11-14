@@ -52,7 +52,7 @@ $ python
 >>> sparkora.configure(output = 'A', data = 'path/to/data.csv')
 
 # is the same as
->>> import pandas as pd
+>>> from pyspark.shell import spark
 >>> dataframe = spark.read.csv('path/to/data.csv', header=True)
 >>> sparkora = Sparkora(output = 'A', data = dataframe)
 
@@ -68,7 +68,6 @@ $ python
 
 ```python
 # read data with missing and poorly scaled values
->>> import pandas as pd
 >>> from pyspark.shell import spark 
 >>> d = [
 ...   (1, 2, 100),
