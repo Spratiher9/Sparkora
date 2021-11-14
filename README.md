@@ -44,7 +44,7 @@ $ python
 
 <a name="examples"></a>
 ## Examples
-Go to this jupyter [notebook](./Example Notebooks/sparkora.ipynb) or import [this](./Example Notebooks/sparkora.html) in databricks workspace
+Go to this jupyter [notebook](Example_Notebooks/sparkora.ipynb) or import [this](Example_Notebooks/sparkora.html) in databricks workspace
 
 <a name="use"></a>
 ## Usage
