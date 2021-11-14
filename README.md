@@ -44,8 +44,14 @@ $ python
 <a name="use"></a>
 ## Usage
 
-Either read on below **or** 
-go to this [notebook](Example Notebooks/sparkora.ipynb) **or**
+Either read on below 
+
+**or** 
+
+go to this [notebook](Example Notebooks/sparkora.ipynb) 
+
+**or**
+
 import [this](Example Notebooks/sparkora.html) in databricks workspace
 
 <a name="config" ></a>
