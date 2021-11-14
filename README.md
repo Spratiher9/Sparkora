@@ -1,3 +1,4 @@
+![Sparkora project logo](assets/Project_Cover.mp4)
 # Sparkora
 Exploratory data analysis toolkit for Pyspark.
 
