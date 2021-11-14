@@ -218,7 +218,7 @@ some_model.score(X, y)
 1  4 NaN  1  right                1
 2  7   8  2   left                1
 >>> sparkora.logs
-[]
+["sparkora.snapshot('initial_data')"]
 
 # switch back to your transformation
 >>> sparkora.use_snapshot('transform1')
