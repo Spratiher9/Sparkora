@@ -1,5 +1,5 @@
 ![Sparkora project logo](./assets/project_cover.gif)
-# Sparkora [![PyPI version](https://badge.fury.io/py/Sparkora.svg)](https://badge.fury.io/py/Sparkora)  [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Spratiher9/Sparkora/graphs/commit-activity)
+# Sparkora [![PyPI version](https://badge.fury.io/py/Sparkora.svg)](https://badge.fury.io/py/Sparkora)  [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Spratiher9/Sparkora/graphs/commit-activity) [![Downloads](https://static.pepy.tech/personalized-badge/sparkora?period=month&units=international_system&left_color=grey&right_color=brightgreen&left_text=PYPI%20Downloads)](https://pepy.tech/project/sparkora)
 Exploratory data analysis toolkit for Pyspark.
 
 Dont forget to hit the star ⭐ button if you like this project and would love to see more such utilities.
